@@ -1,12 +1,27 @@
 package api;
 
-public class Node implements NodeData {
+import java.util.HashMap;
+
+public class Node implements NodeData
+{
     private int id;
-    private double w;
+    private double weight;
+    private GeoLocation location;
+    private String info;
     private int tag;
-    private GeoLocation_Class Loc;
-    public Node(int id){
-        this.id=id;
+    public HashMap<Integer, Edge> outEdges; // all edges going out of the node
+    public HashMap<Integer, Edge> inEdges;  // all edges going in to the node
+
+
+    public Node(int id, double x, double y, double z)
+    {
+        this.id = id;
+        location = new Location(x, y, z);
+        weight = 0;
+        info = "";
+        tag = 0;
+        outEdges = new HashMap<>();
+        inEdges = new HashMap<>();
     }
 
     @Override
@@ -16,38 +31,32 @@ public class Node implements NodeData {
 
     @Override
     public GeoLocation getLocation() {
-        return Loc;
+        return location;
     }
 
     @Override
     public void setLocation(GeoLocation p) {
-        double x=p.x();
-        double y=p.y();
-        double z=p.z();
-        Loc = new GeoLocation_Class(x,y,z);
+        location = new Location(p.x(), p.y(), p.z());
     }
 
     @Override
     public double getWeight() {
-        return w;
+        return weight;
     }
 
     @Override
-    public void setWeight(double w) {
-        this.w=w;
+    public void setWeight(double weight) {
+        this.weight=weight;
     }
 
     @Override
     public String getInfo() {
-        String id = "id: " + this.id;
-        String w = "Weight: " + this.w;
-        String Loc = "Location: (" + this.Loc.x() + ", " + this.Loc.y() + ", " + this.Loc.z() + ")";
-        return id + " " + w + " " + Loc;
+        return info;
     }
 
     @Override
     public void setInfo(String s) {
-        //לקבל סטרינג בפורמט מסויים ולחלץ ממנו את הקואורדינטות ולעדכן את כל הנתונים שלנו
+        this.info =info;
     }
 
     @Override
@@ -58,5 +67,15 @@ public class Node implements NodeData {
     @Override
     public void setTag(int t) {
         this.tag=t;
+    }
+
+    @Override
+    public HashMap<Integer, Edge> outEdges() {
+        return outEdges;
+    }
+
+    @Override
+    public HashMap<Integer, Edge> inEdges() {
+        return inEdges;
     }
 }

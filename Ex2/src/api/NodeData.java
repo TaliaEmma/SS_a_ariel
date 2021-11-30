@@ -1,5 +1,8 @@
 package api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This interface represents the set of operations applicable on a 
  * node (vertex) in a (directional) weighted graph.
@@ -40,15 +43,19 @@ public interface NodeData {
 	 */
 	public void setInfo(String s);
 	/**
-	 * Temporal data (aka = "also known as" color: e,g, white, gray, black)
-	 * which can be used be algorithms 
+	 * Temporal data (aka color: e,g, white, gray, black)
+	 * which can be used be algorithms
 	 * @return
 	 */
 	public int getTag();
-	/** 
+	/**
 	 * Allows setting the "tag" value for temporal marking an node - common
 	 * practice for marking by algorithms.
 	 * @param t - the new value of the tag
 	 */
 	public void setTag(int t);
+
+	public HashMap<Integer, Edge> outEdges();
+
+	public HashMap<Integer, Edge> inEdges();
 }
