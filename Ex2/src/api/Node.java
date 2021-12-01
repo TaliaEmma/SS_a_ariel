@@ -9,12 +9,14 @@ public class Node implements NodeData
     private GeoLocation location;
     private String info;
     private int tag;
-    public HashMap<Integer, Edge> outEdges; // all edges going out of the node
-    public HashMap<Integer, Edge> inEdges;  // all edges going in to the node
+    private boolean outChange; //check if the edges going out changed since graph constructed.
+    private HashMap<Integer, EdgeData> outEdges;
+    private HashMap<Integer, EdgeData> inEdges;  // MAYBE DELETE. CHECK LATER
 
 
     public Node(int id, double x, double y, double z)
     {
+        outChange = false;
         this.id = id;
         location = new Location(x, y, z);
         weight = 0;
@@ -23,6 +25,12 @@ public class Node implements NodeData
         outEdges = new HashMap<>();
         inEdges = new HashMap<>();
     }
+
+    @Override
+    public boolean outChange(){ return outChange; }
+
+    @Override
+    public void setOutChange(boolean a){ outChange = a; }
 
     @Override
     public int getKey() {
@@ -70,12 +78,12 @@ public class Node implements NodeData
     }
 
     @Override
-    public HashMap<Integer, Edge> outEdges() {
+    public HashMap<Integer, EdgeData> outEdges() {
         return outEdges;
     }
 
     @Override
-    public HashMap<Integer, Edge> inEdges() {
+    public HashMap<Integer, EdgeData> inEdges() {
         return inEdges;
     }
 }
