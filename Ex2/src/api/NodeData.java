@@ -1,7 +1,6 @@
 package api;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This interface represents the set of operations applicable on a 
@@ -9,7 +8,7 @@ import java.util.Map;
  * @author boaz.benmoshe
  */
 public interface NodeData {
-	/**
+    /**
 	 * Returns the key (id) associated with this node.
 	 * @return
 	 */
@@ -55,7 +54,11 @@ public interface NodeData {
 	 */
 	public void setTag(int t);
 
-	public HashMap<Integer, Edge> outEdges();
+	public HashMap<Integer, EdgeData> outEdges();
 
-	public HashMap<Integer, Edge> inEdges();
+	public HashMap<Integer, EdgeData> inEdges();
+
+	public boolean outChange();
+
+	public void setOutChange(boolean a);
 }
