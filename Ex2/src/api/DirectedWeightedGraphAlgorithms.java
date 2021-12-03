@@ -40,7 +40,7 @@ public interface DirectedWeightedGraphAlgorithms {
      * other node. NOTE: assume directional graph (all n*(n-1) ordered pairs).
      * @return
      */
-    public boolean isConnected();
+    public boolean isConnected();//ע"י BFS, בדיקת גרף קשיר
     /**
      * Computes the length of the shortest path between src to dest
      * Note: if no such path --> returns -1
@@ -48,7 +48,7 @@ public interface DirectedWeightedGraphAlgorithms {
      * @param dest - end (target) node
      * @return
      */
-    public double shortestPathDist(int src, int dest);
+    public double shortestPathDist(int src, int dest);//דייקסטרה
     /**
      * Computes the the shortest path between src to dest - as an ordered List of nodes:
      * src--> n1-->n2-->...dest
@@ -58,14 +58,14 @@ public interface DirectedWeightedGraphAlgorithms {
      * @param dest - end (target) node
      * @return
      */
-    public List<NodeData> shortestPath(int src, int dest);
+    public List<NodeData> shortestPath(int src, int dest); //דייקסטרה
 
     /**
      * Finds the NodeData which minimizes the max distance to all the other nodes.
      * Assuming the graph isConnected, elese return null. See: https://en.wikipedia.org/wiki/Graph_center
      * @return the Node data to which the max shortest path to all the other nodes is minimized.
      */
-    public NodeData center();
+    public NodeData center(); //שריפת עלים
    /**
     * Computes a list of consecutive nodes which go over all the nodes in cities.
     * the sum of the weights of all the consecutive (pairs) of nodes (directed) is the "cost" of the solution -
