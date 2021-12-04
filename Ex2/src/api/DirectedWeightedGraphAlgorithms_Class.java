@@ -1,42 +1,35 @@
 package api;
 
-import java.util.*;
-import java.io.FileReader;
+import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 
-public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGraphAlgorithms{
-    private DirectedWeightedGraph G;
+public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGraphAlgorithms
+{
+    private DirectedWeightedGraph original;
+    private DirectedWeightedGraph copied;
 
-    @java.lang.Override
-    public void init(DirectedWeightedGraph g) {
-        this.G = g;
+    @Override
+    public void init(DirectedWeightedGraph g)
+    {
+        original = g; //original points to g
+        copied = new DirectedWeightedGraph_Class(g); //deep copy of g
     }
 
-    @java.lang.Override
-    public DirectedWeightedGraph getGraph() {
-        return G;
-    }
+    @Override
+    public DirectedWeightedGraph getGraph() { return original; }
 
-    @java.lang.Override
-    public DirectedWeightedGraph copy() {
-        return null;
-    }
+    @Override
+    public DirectedWeightedGraph copy() { return copied; }
 
-    @java.lang.Override
-    public boolean isConnected() {
 
-        return false;
-    }
-
-    @java.lang.Override
-    public double shortestPathDist(int src, int dest) { //dijkstra
-       /* boolean[] visited;  //מיקום בו היינו כבר בגרף
+    public void calculatePathData(int key)
+    {
+        /* boolean[] visited;  //מיקום בו היינו כבר בגרף
         int[] dist; //המרחק בין הקודקודים
         int[] pred; //קודקוד האב של הקודקוד
-
         nodes node = new nodes();
-
         for (String i : nodes.keySet()) {
             pred[i] = null;
             visited[i] = false;
@@ -44,49 +37,58 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
         }
         dist[0] = 0;
         visited[0] = true;
-
         while(nodes.hasNext){
             int min = Collections.min(nodes.keySet());
             for(nodes.values){
                 if (!visited[u])
                     if (dist[u] > dist[v] + G[v][u].w) pred[u] = v;
                 dist[u] = min(dist[u], dist[v] + G[v][u].w);
-
             }
-
             visited[v] = true
         }
         return 0;
         */
+    }
 
-    @java.lang.Override
+    @Override
+    public boolean isConnected() {
+        return true;
+    }
+
+    @Override
+    public double shortestPathDist(int src, int dest) { return 0; }
+
+
+    @Override
     public List<NodeData> shortestPath(int src, int dest) {
         return null;
     }
 
-    @java.lang.Override
-    public NodeData center() {
-        return null;
-    }
+    @Override
+    public NodeData center() { return null; }
 
-    @java.lang.Override
+    @Override
     public List<NodeData> tsp(List<NodeData> cities) {
         return null;
     }
 
-    @java.lang.Override
+    @Override
     public boolean save(String file) {
         return false;
     }
 
-    @java.lang.Override
+    @Override
     public boolean load(String file) {
-        try {
-            this.G = new DirectedWeightedGraph_Class(file);
-            return true;
+
+        try
+        {
+            this.original = new DirectedWeightedGraph_Class(file);
         }
-        catch (Exception e) {
-            return false;
+        catch (IOException | ParseException e)
+        {
+            e.printStackTrace();
         }
+        return true;
+
     }
 }
