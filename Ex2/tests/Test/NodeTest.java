@@ -1,40 +1,44 @@
 package Test;
+
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class Edge{
+class NodeTest {
 
     @Test
-    void Edge(){
+    void getKey() {
     }
 
     @Test
-    void getSrc(){
+    void getLocation() {
     }
 
     @Test
-    void getDest(){
+    void setLocation() {
     }
 
     @Test
-    void getWeight(){
+    void getWeight() {
     }
 
     @Test
-    void getInfo(){
+    void setWeight() {
     }
 
     @Test
-    void setInfo(){
+    void getInfo() {
     }
 
     @Test
-    void getTag(){
+    void setInfo() {
     }
 
     @Test
-    void setTag(){
+    void getTag() {
     }
 
-
+    @Test
+    void setTag() {
+    }
 }
