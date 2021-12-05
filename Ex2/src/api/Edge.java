@@ -13,7 +13,7 @@ public class Edge implements EdgeData
         this.src = src;
         this.dest = dest;
         this.weight = weight;
-        this.info = " ";
+        this.info = "";
         this.tag = 0;
     }
     @Override

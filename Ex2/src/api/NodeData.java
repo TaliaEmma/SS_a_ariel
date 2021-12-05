@@ -1,7 +1,5 @@
 package api;
 
-import java.util.HashMap;
-
 /**
  * This interface represents the set of operations applicable on a 
  * node (vertex) in a (directional) weighted graph.
@@ -53,12 +51,4 @@ public interface NodeData {
 	 * @param t - the new value of the tag
 	 */
 	public void setTag(int t);
-
-	public HashMap<Integer, EdgeData> outEdges();
-
-	public HashMap<Integer, EdgeData> inEdges();
-
-	public boolean outChange();
-
-	public void setOutChange(boolean a);
 }

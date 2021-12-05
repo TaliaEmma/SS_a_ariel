@@ -5,28 +5,51 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 
 
 public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
-    private HashMap<Integer, NodeData> nodes;
-    private HashMap<String, EdgeData> edges; // for example, if str=2 and dest=4 then the key is the string: "2,4"
-    Iterator<NodeData> nodesIterator;
-    Iterator<EdgeData> edgeIterator;
-    private int MC;
+    private HashMap<Integer, NodeData> nodes; //the key is the node id.
+    private HashMap<String, EdgeData> edges; // for example, if src=2 and dest=4 then the key is the string: "2,4"
+    private int MC; //count changes in the graph.
+    private HashMap<Integer, HashMap<Integer, EdgeData>> outEdges;
+    private HashMap<Integer, HashMap<Integer, EdgeData>> inEdges;
+
+
+    public DirectedWeightedGraph_Class(DirectedWeightedGraph graph)
+    {
+        nodes = new HashMap<Integer, NodeData>();
+        edges = new HashMap<String, EdgeData>();
+        outEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
+        inEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
+        MC = graph.getMC();
+
+        Iterator<NodeData> iterator1 = graph.nodeIter();
+        while(iterator1.hasNext()) {
+            NodeData node = iterator1.next();
+            addNode(node);
+            //nodes.put(node.getKey(), new Node(node.getKey(), node.getLocation().x(), node.getLocation().y(), node.getLocation().z()));
+        }
+
+        Iterator<EdgeData> iterator2 = graph.edgeIter();
+        while(iterator2.hasNext()) {
+            EdgeData edge = iterator2.next();
+            connect(edge.getSrc(), edge.getDest(), edge.getWeight());
+        }
+    }
 
 
     public DirectedWeightedGraph_Class(String fileName) throws IOException, ParseException, JSONException
     {
         nodes = new HashMap<Integer, NodeData>();
         edges = new HashMap<String, EdgeData>();
-        nodesIterator = nodes.values().iterator();
-        edgeIterator = edges.values().iterator();
+        outEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
+        inEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
         MC = 0;
 
         JSONObject j = (JSONObject) new JSONParser().parse(new FileReader(fileName));
@@ -53,89 +76,77 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
 
             Edge edge = new Edge(src, dest, w);
             String str = src + "," + dest;
-            nodes.get(src).outEdges().put(dest, edge);
-            nodes.get(dest).inEdges().put(src, edge);
+            outEdges.get(src).put(dest, edge);
+            inEdges.get(dest).put(src, edge);
             edges.put(str, edge);
         }
     }
 
     @Override
-    public NodeData getNode(int key)
-    {
-        return nodes.get(key);
-    }
+    public NodeData getNode(int key) { return nodes.get(key); }
 
     @Override
-    public EdgeData getEdge(int src, int dest)
-    {
+    public EdgeData getEdge(int src, int dest) {
         String str = src + "," + dest;
         return edges.get(str);
     }
 
     @Override
-    public void addNode(NodeData n)
-    {
+    public void addNode(NodeData n) {
         MC++;
-        nodes.put(n.getKey() , n);
+        nodes.put(n.getKey() , new Node(n.getKey(), n.getLocation().x(), n.getLocation().y(), n.getLocation().z()));
     }
 
     @Override
-    public void connect(int src, int dest, double w)
-    {
+    public void connect(int src, int dest, double w) {
         MC++;
         Edge e = new Edge(src, dest, w);
         String str = src + "," + dest;
         edges.put(str, e);
+        inEdges.get(dest).put(src, e);
+        outEdges.get(src).put(dest, e);
     }
 
     @Override
     public Iterator<NodeData> nodeIter()
     {
-        if(MC > 0)
-            throw new RuntimeException();
-        else
-            return nodesIterator;
+        return nodes.values().iterator();
     }
 
     @Override
     public Iterator<EdgeData> edgeIter()
     {
-        if(MC > 0)
-            throw new RuntimeException();
-        else
-            return edgeIterator;
+        return edges.values().iterator();
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id)
     {
-        if(!nodes.get(node_id).outChange())
-            throw new RuntimeException();
-        else
-            return nodes.get(node_id).outEdges().values().iterator();
+        return outEdges.get(node_id).values().iterator();
     }
 
     @Override
     public NodeData removeNode(int key)
     {
         MC++;
-        for(Map.Entry<String, EdgeData> set : edges.entrySet())
-            if(set.getValue().getDest() == key || set.getValue().getSrc() == key)
-            {
-                nodes.get(edges.get(set.getKey()).getSrc()).setOutChange(true);
-                nodes.get(edges.get(set.getKey()).getDest()).setOutChange(true);
-                edges.remove(set.getKey());
-            }
-        return nodes.remove(key);
+        for(EdgeData e : inEdges.get(key).values()) //go over edges going in to the chosen node
+        {
+            removeEdge(e.getSrc(), e.getDest()); //o(1)
+        }
+        for(EdgeData e : outEdges.get(key).values()) //go over edges going out from the chosen node
+        {
+            removeEdge(e.getSrc(), e.getDest()); //o(1)
+        }
+        return nodes.remove(key); //o(1)
     }
 
     @Override
     public EdgeData removeEdge(int src, int dest)
     {
         MC++;
+        outEdges.get(src).remove(dest);
+        inEdges.get(dest).remove(src);
         String str = src + "," + dest;
-        nodes.get(src).setOutChange(true);
-        nodes.get(dest).setOutChange(true);
         return edges.remove(str);
     }
 
