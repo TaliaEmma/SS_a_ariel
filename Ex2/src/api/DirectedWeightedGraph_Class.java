@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 
-
 public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
     private HashMap<Integer, NodeData> nodes; //the key is the node id.
     private HashMap<String, EdgeData> edges; // for example, if src=2 and dest=4 then the key is the string: "2,4"
@@ -127,13 +126,12 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
     public NodeData removeNode(int key)
     {
         MC++;
-        for(EdgeData e : inEdges.get(key).values()) //go over edges going in to the chosen node
+        Iterator<EdgeData> edgesIter = edgeIter();
+        while (edgesIter.hasNext())
         {
-            removeEdge(e.getSrc(), e.getDest()); //o(1)
-        }
-        for(EdgeData e : outEdges.get(key).values()) //go over edges going out from the chosen node
-        {
-            removeEdge(e.getSrc(), e.getDest()); //o(1)
+            EdgeData e = edgesIter.next();
+            if (e.getSrc() == key || e.getDest() == key)
+                edgesIter.remove();
         }
         return nodes.remove(key); //o(1)
     }
