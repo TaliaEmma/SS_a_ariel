@@ -9,6 +9,19 @@ import java.util.*;
 
 public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGraphAlgorithms
 {
+    static class AdjListNode {
+        int vertex;
+        double weight;
+
+        public AdjListNode(int v, double w)
+        {
+            vertex = v;
+            weight = w;
+        }
+        int getVertex() { return vertex; }
+        double getWeight() { return weight; }
+    }
+
     private DirectedWeightedGraph graph;
 
 
@@ -62,39 +75,38 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
 
     @Override
     public double shortestPathDist(int src, int dest)
-    {// worst case is o(V^2)
-        HashMap<String, Double> matrix= new HashMap<>();
+    {// final complexity is: o(ElogV)
+        HashMap<Integer, ArrayList<AdjListNode>> ew = new HashMap<>();
         HashMap<Integer, Double> dist = new HashMap<>();
-        HashMap<Integer, Boolean> sptSet= new HashMap<>();
-
-        Iterator<NodeData> nodesIter = graph.nodeIter();
-        while (nodesIter.hasNext())
+        Iterator<NodeData> nodeIter = graph.nodeIter();
+        while (nodeIter.hasNext())
         {
-            NodeData node = nodesIter.next();
+            NodeData node = nodeIter.next();
             dist.put(node.getKey(), Double.MAX_VALUE);
-            sptSet.put(node.getKey(), false);
+            ew.put(node.getKey(), new ArrayList<>());
         }
-        Iterator<EdgeData> edgesIterator = graph.edgeIter();
-        while(edgesIterator.hasNext())
+        dist.put(src, 0.0);
+
+        Iterator<EdgeData> edgeIter = graph.edgeIter();
+        while (edgeIter.hasNext())
         {
-            EdgeData edge = edgesIterator.next();
-            String str = edge.getSrc() + "," + edge.getDest();
-            matrix.put(str, edge.getWeight());
+            EdgeData edge = edgeIter.next();
+            ew.get(edge.getSrc()).add(new AdjListNode(edge.getDest(), edge.getWeight()));
         }
 
-        dist.put(src, 0.0);
-        for (int count = 0; count < graph.nodeSize() - 1; count++)
+        PriorityQueue<AdjListNode> pq = new PriorityQueue<>(Comparator.comparingDouble(AdjListNode::getWeight));
+        pq.add(new AdjListNode(src, 0.0));
+
+        while (pq.size() > 0)
         {
-            int u = minDistance(dist, sptSet);
-            sptSet.put(u, true);
-            Iterator<NodeData> iterator = graph.nodeIter();
-            while (iterator.hasNext())
+            AdjListNode current = pq.poll();
+            for (AdjListNode n : ew.get(current.getVertex()))
             {
-                NodeData node = iterator.next();
-                int v = node.getKey();
-                String str = u + "," + v;
-                if (matrix.containsKey(str) && !sptSet.get(v) && matrix.get(str) != 0 && dist.get(u) != Double.MAX_VALUE && dist.get(u) + matrix.get(str) < dist.get(v))
-                    dist.put(v, dist.get(u) + matrix.get(str));
+                if (dist.get(current.vertex) + n.weight < dist.get(n.vertex))
+                {
+                    dist.put(n.vertex, n.weight + dist.get(current.vertex));
+                    pq.add(new AdjListNode(n.getVertex(), dist.get(n.vertex)));
+                }
             }
         }
         return dist.get(dest);
@@ -102,46 +114,41 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
 
     @Override
     public List<NodeData> shortestPath(int src, int dest)
-    {// final complexity is: o(V^2)
-        HashMap<String, Double> edgeW= new HashMap<>(); //save all edges weight
-        HashMap<Integer, Integer> preNode = new HashMap<>(); //the value is the node that will come before the key in the returned list.
-        HashMap<Integer, Double> dist = new HashMap<>(); //keys are nodes id and value is the distance to them from the src.
-        HashMap<Integer, Boolean> sptSet= new HashMap<>(); //keys are nodes id and value is true if we benn to the node.
-
-        Iterator<NodeData> nodesIter = graph.nodeIter();
-        while (nodesIter.hasNext())
+    {// final complexity is: o(ElogV)
+        HashMap<Integer, ArrayList<AdjListNode>> ew = new HashMap<>();
+        HashMap<Integer, Double> dist = new HashMap<>();
+        Iterator<NodeData> nodeIter = graph.nodeIter();
+        HashMap<Integer, Integer> preNode = new HashMap<>();
+        while (nodeIter.hasNext())
         {
-            NodeData node = nodesIter.next();
+            NodeData node = nodeIter.next();
             dist.put(node.getKey(), Double.MAX_VALUE);
-            sptSet.put(node.getKey(), false);
+            ew.put(node.getKey(), new ArrayList<>());
         }
-        Iterator<EdgeData> edgesIterator = graph.edgeIter();
-        while(edgesIterator.hasNext())
+        dist.put(src, 0.0);
+
+        Iterator<EdgeData> edgeIter = graph.edgeIter();
+        while (edgeIter.hasNext())
         {
-            EdgeData edge = edgesIterator.next();
-            String str = edge.getSrc() + "," + edge.getDest();
-            edgeW.put(str, edge.getWeight());
+            EdgeData edge = edgeIter.next();
+            ew.get(edge.getSrc()).add(new AdjListNode(edge.getDest(), edge.getWeight()));
         }
 
-        dist.put(src, 0.0);
-        for (int count = 0; count < graph.nodeSize() - 1; count++)
+        PriorityQueue<AdjListNode> pq = new PriorityQueue<>(Comparator.comparingDouble(AdjListNode::getWeight));
+        pq.add(new AdjListNode(src, 0.0));
+
+        while (pq.size() > 0)
         {
-            int u = minDistance(dist, sptSet);
-            sptSet.put(u, true);
-            Iterator<NodeData> iterator = graph.nodeIter();
-            while (iterator.hasNext())
-            {
-                NodeData node = iterator.next();
-                int v = node.getKey();
-                String str = u + "," + v;
-                if (edgeW.containsKey(str) && !sptSet.get(v) && edgeW.get(str) != 0 && dist.get(u) != Double.MAX_VALUE && dist.get(u) + edgeW.get(str) < dist.get(v))
+            AdjListNode current = pq.poll();
+            for (AdjListNode n : ew.get(current.getVertex()))
+                if (dist.get(current.vertex) + n.weight < dist.get(n.vertex))
                 {
-                    dist.put(v, dist.get(u) + edgeW.get(str));
-                    preNode.put(v, u);
-                    if (v == dest)
+                    dist.put(n.vertex, n.weight + dist.get(current.vertex));
+                    pq.add(new AdjListNode(n.getVertex(), dist.get(n.vertex)));
+                    preNode.put(n.vertex, current.vertex);
+                    if (n.vertex == dest)
                         return checkPath(preNode, src, dest);
                 }
-            }
         }
         return null;
     }
@@ -149,13 +156,17 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
     @Override
     public NodeData center()
     {
-        HashMap<String, Double> edgeW = new HashMap<>(); //save all the edges weights
-        Iterator<EdgeData> edgesIterator = graph.edgeIter();
-        while(edgesIterator.hasNext())
+        HashMap<Integer, ArrayList<AdjListNode>> ew = new HashMap<>(); //save all the edges weights
+
+        Iterator<NodeData> nodeIter = graph.nodeIter();
+        while (nodeIter.hasNext())
+            ew.put(nodeIter.next().getKey(), new ArrayList<>());
+
+        Iterator<EdgeData> edgeIter = graph.edgeIter();
+        while (edgeIter.hasNext())
         {
-            EdgeData edge = edgesIterator.next();
-            String str = edge.getSrc() + "," + edge.getDest();
-            edgeW.put(str, edge.getWeight());
+            EdgeData edge = edgeIter.next();
+            ew.get(edge.getSrc()).add(new AdjListNode(edge.getDest(), edge.getWeight()));
         }
 
         int id=0;
@@ -164,7 +175,7 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
         while (nodesIter.hasNext())
         { //go over all the nodes and find the lowest value.
             NodeData node = nodesIter.next();
-            double newWeight = dijkstra(node.getKey(), edgeW);
+            double newWeight = dijkstra(node.getKey(), ew);
             if(newWeight == -1)
                 return null;
             if (lowestWeight > newWeight)
@@ -273,24 +284,6 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
         return false;
     }
 
-    int minDistance(HashMap<Integer, Double> dist, HashMap<Integer, Boolean> sptSet)
-    {
-        //implements Dijkstra's shortest pat algorithm for the graph
-        double min = Double.MAX_VALUE;
-        int min_index = -1;
-        Iterator<NodeData> nodesIter = graph.nodeIter();
-        while (nodesIter.hasNext())
-        {
-            NodeData node = nodesIter.next();
-            if (!sptSet.get(node.getKey()) && dist.get(node.getKey()) <= min)
-            {
-                min = dist.get(node.getKey());
-                min_index = node.getKey();
-            }
-        }
-        return min_index;
-    }
-
     private List<NodeData> checkPath(HashMap<Integer, Integer> preNode, int src, int dest)
     {
         LinkedList<NodeData> list = new LinkedList<>();
@@ -311,35 +304,32 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
                 DFS(adjList, u, visited);
     }
 
-    private double dijkstra(int src, HashMap<String, Double> edgesW)
+    private double dijkstra(int src, HashMap<Integer, ArrayList<AdjListNode>> ew)
     {
         // the function is for the center algorithm. its build like the previous versions but here we
         // will return the highest result instead of result for a given destination value.
+
         HashMap<Integer, Double> dist = new HashMap<>();
-        HashMap<Integer, Boolean> sptSet= new HashMap<>();
-
-        Iterator<NodeData> nodesIter = graph.nodeIter();
-        while (nodesIter.hasNext()) //o(V)
+        Iterator<NodeData> nodeIter = graph.nodeIter();
+        while (nodeIter.hasNext())
         {
-            NodeData node = nodesIter.next();
+            NodeData node = nodeIter.next();
             dist.put(node.getKey(), Double.MAX_VALUE);
-            sptSet.put(node.getKey(), false);
         }
-
         dist.put(src, 0.0);
-        for (int i = 0; i < graph.nodeSize() - 1; i++)
+
+        PriorityQueue<AdjListNode> pq = new PriorityQueue<>(Comparator.comparingDouble(AdjListNode::getWeight));
+        pq.add(new AdjListNode(src, 0.0));
+
+        while (pq.size() > 0)
         {
-            int u = minDistance(dist, sptSet);
-            sptSet.put(u, true);
-            Iterator<NodeData> iterator = graph.nodeIter();
-            while (iterator.hasNext())
+            AdjListNode current = pq.poll();
+            for (AdjListNode n : ew.get(current.getVertex()))
             {
-                NodeData node = iterator.next();
-                int v = node.getKey();
-                String str = u + "," + v;
-                if (edgesW.containsKey(str) && !sptSet.get(v) && edgesW.get(str) != 0 && dist.get(u) != Double.MAX_VALUE && dist.get(u) + edgesW.get(str) < dist.get(v))
+                if (dist.get(current.vertex) + n.weight < dist.get(n.vertex))
                 {
-                    dist.put(v, dist.get(u) + edgesW.get(str));
+                    dist.put(n.vertex, n.weight + dist.get(current.vertex));
+                    pq.add(new AdjListNode(n.getVertex(), dist.get(n.vertex)));
                 }
             }
         }
