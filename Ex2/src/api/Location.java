@@ -9,7 +9,6 @@ public class Location implements GeoLocation
         this.y=y;
         this.z=z;
     }
-
     @Override
     public double x() {
         return x;
