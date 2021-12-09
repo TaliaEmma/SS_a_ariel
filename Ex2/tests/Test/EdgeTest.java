@@ -1,36 +1,56 @@
 package Test;
 
 import org.junit.jupiter.api.Test;
-
+import api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EdgeTest {
 
+    Edge et = new Edge(1,2,3.0);
     @Test
-    void getSrc() {
+    void getSrc()
+    {
+        assertEquals(et.getSrc(),1);
     }
 
     @Test
-    void getDest() {
+    void getDest()
+    {
+        assertEquals(et.getDest(),2);
     }
 
     @Test
-    void getWeight() {
+    void getWeight()
+    {
+        assertEquals(et.getWeight() ,3);
     }
 
     @Test
-    void getInfo() {
+    void getInfo()
+    {
+        assertEquals(et.getInfo() ,"");
     }
 
     @Test
-    void setInfo() {
+    void setInfo()
+    {
+        et.setInfo("Ex2");
+        assertEquals(et.getInfo() ,"Ex2");
+
     }
 
     @Test
-    void getTag() {
+    void getTag()
+    {
+        assertEquals(et.getTag() ,0);
+
     }
 
     @Test
-    void setTag() {
+    void setTag()
+    {
+        et.setTag(9);
+        assertEquals(et.getTag() ,9);
+
     }
 }

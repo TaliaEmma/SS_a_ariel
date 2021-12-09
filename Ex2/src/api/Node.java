@@ -52,7 +52,7 @@ public class Node implements NodeData
 
     @Override
     public void setInfo(String s) {
-        this.info =info;
+        this.info =s;
     }
 
     @Override
