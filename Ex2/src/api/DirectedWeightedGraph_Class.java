@@ -1,7 +1,6 @@
 package api;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
     }
 
 
-    public DirectedWeightedGraph_Class(String fileName) throws IOException, JSONException
+    public DirectedWeightedGraph_Class(String fileName)
     {
         nodes = new HashMap<Integer, NodeData>();
         edges = new HashMap<String, EdgeData>();
@@ -51,7 +50,15 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
         inEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
         MC = 0;
 
-        JSONObject j = new JSONObject(new String(Files.readAllBytes(Paths.get(fileName))));
+        JSONObject j = null;
+        try
+        {
+            j = new JSONObject(new String(Files.readAllBytes(Paths.get(fileName))));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         JSONArray jEdges = j.getJSONArray("Edges");
         JSONArray jNodes = j.getJSONArray("Nodes");
         for(int i = 0; i < jNodes.length(); i++)
@@ -86,14 +93,14 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
 
     @Override
     public void addNode(NodeData n)
-    {
+    {// hash map complexity of put is o(1) so the toal complexity of adding new node is o(1).
         MC++;
         nodes.put(n.getKey() , new Node(n.getKey(), n.getLocation().x(), n.getLocation().y(), n.getLocation().z()));
     }
 
     @Override
     public void connect(int src, int dest, double w)
-    {
+    {//hash map complexity of put is o(1) so total complexity would be o(1).
         MC++;
         inEdges.put(dest, new HashMap<Integer, EdgeData>());
         outEdges.put(src, new HashMap<Integer, EdgeData>());
