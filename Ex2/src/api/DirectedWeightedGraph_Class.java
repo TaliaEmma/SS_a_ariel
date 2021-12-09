@@ -3,14 +3,12 @@ package api;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
-
 
 
 public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
@@ -30,21 +28,22 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
         MC = graph.getMC();
 
         Iterator<NodeData> iterator1 = graph.nodeIter();
-        while(iterator1.hasNext()) {
+        while(iterator1.hasNext())
+        {
             NodeData node = iterator1.next();
             addNode(node);
-            //nodes.put(node.getKey(), new Node(node.getKey(), node.getLocation().x(), node.getLocation().y(), node.getLocation().z()));
         }
 
         Iterator<EdgeData> iterator2 = graph.edgeIter();
-        while(iterator2.hasNext()) {
+        while(iterator2.hasNext())
+        {
             EdgeData edge = iterator2.next();
             connect(edge.getSrc(), edge.getDest(), edge.getWeight());
         }
     }
 
 
-    public DirectedWeightedGraph_Class(String fileName) throws IOException, ParseException, JSONException
+    public DirectedWeightedGraph_Class(String fileName) throws IOException, JSONException
     {
         nodes = new HashMap<Integer, NodeData>();
         edges = new HashMap<String, EdgeData>();
@@ -52,7 +51,7 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
         inEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
         MC = 0;
 
-        JSONObject j = (JSONObject) new JSONParser().parse(new FileReader(fileName));
+        JSONObject j = new JSONObject(new String(Files.readAllBytes(Paths.get(fileName))));
         JSONArray jEdges = j.getJSONArray("Edges");
         JSONArray jNodes = j.getJSONArray("Nodes");
         for(int i = 0; i < jNodes.length(); i++)
@@ -64,21 +63,15 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
             double x = Double.parseDouble(loc_of_node[0]);
             double y = Double.parseDouble(loc_of_node[1]);
             double z = Double.parseDouble(loc_of_node[2]);
-
             Node node = new Node(id, x, y, z);
-            nodes.put(node.getKey(), node);
+            addNode(node);
         }
         for(int i = 0; i < jEdges.length(); i++)
         {
             int src = jEdges.getJSONObject(i).getInt("src");
             double w = jEdges.getJSONObject(i).getDouble("w");
             int dest = jEdges.getJSONObject(i).getInt("dest");
-
-            Edge edge = new Edge(src, dest, w);
-            String str = src + "," + dest;
-            outEdges.get(src).put(dest, edge);
-            inEdges.get(dest).put(src, edge);
-            edges.put(str, edge);
+            connect(src, dest, w);
         }
     }
 
@@ -92,14 +85,18 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
     }
 
     @Override
-    public void addNode(NodeData n) {
+    public void addNode(NodeData n)
+    {
         MC++;
         nodes.put(n.getKey() , new Node(n.getKey(), n.getLocation().x(), n.getLocation().y(), n.getLocation().z()));
     }
 
     @Override
-    public void connect(int src, int dest, double w) {
+    public void connect(int src, int dest, double w)
+    {
         MC++;
+        inEdges.put(dest, new HashMap<Integer, EdgeData>());
+        outEdges.put(src, new HashMap<Integer, EdgeData>());
         Edge e = new Edge(src, dest, w);
         String str = src + "," + dest;
         edges.put(str, e);
@@ -129,13 +126,12 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
     public NodeData removeNode(int key)
     {
         MC++;
-        for(EdgeData e : inEdges.get(key).values()) //go over edges going in to the chosen node
+        Iterator<EdgeData> edgesIter = edgeIter();
+        while (edgesIter.hasNext())
         {
-            removeEdge(e.getSrc(), e.getDest()); //o(1)
-        }
-        for(EdgeData e : outEdges.get(key).values()) //go over edges going out from the chosen node
-        {
-            removeEdge(e.getSrc(), e.getDest()); //o(1)
+            EdgeData e = edgesIter.next();
+            if (e.getSrc() == key || e.getDest() == key)
+                edgesIter.remove();
         }
         return nodes.remove(key); //o(1)
     }
