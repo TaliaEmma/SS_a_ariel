@@ -1,11 +1,12 @@
 package Test;
 
 import org.junit.jupiter.api.Test;
-
+import api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DirectedWeightedGraphAlgorithms_ClassTest {
 
+    DirectedWeightedGraphAlgorithms_Class D;
     @Test
     void init() {
     }
