@@ -1,13 +1,8 @@
 package Test;
 
-import api.*;
-
+import api.DirectedWeightedGraph_Class;
+import api.Node;
 import org.junit.jupiter.api.Test;
-import org.json.JSONException;
-import java.io.IOException;
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DirectedWeightedGraph_ClassTest {
 
@@ -17,16 +12,10 @@ class DirectedWeightedGraph_ClassTest {
     {
         DirectedWeightedGraph_Class D= null;
 
-    try
-    {
         D = new DirectedWeightedGraph_Class("G1");
         D.getNode(1);
 
-    } catch (IOException exception)
-    {
-
-    }
-    return D;
+        return D;
 }
     @Test
     void getNode() {

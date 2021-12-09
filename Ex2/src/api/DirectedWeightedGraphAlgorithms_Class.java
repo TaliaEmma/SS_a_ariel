@@ -24,11 +24,18 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
 
     private DirectedWeightedGraph graph;
 
+    public DirectedWeightedGraphAlgorithms_Class()
+    {
+        this.graph = null;
+    }
+
 
     public DirectedWeightedGraphAlgorithms_Class(String fileName)
     {
         load(fileName);
     }
+
+    public DirectedWeightedGraphAlgorithms_Class(DirectedWeightedGraph graph) { init(graph); }
 
 
     @Override
@@ -271,17 +278,9 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
     @Override
     public boolean load(String file)
     {
-        try
-        {
-            DirectedWeightedGraph_Class g = new DirectedWeightedGraph_Class(file);
-            init(g);
-            return true;
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
+        DirectedWeightedGraph_Class g = new DirectedWeightedGraph_Class(file);
+        init(g);
+        return true;
     }
 
     private List<NodeData> checkPath(HashMap<Integer, Integer> preNode, int src, int dest)
