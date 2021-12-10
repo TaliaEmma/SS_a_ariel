@@ -17,7 +17,6 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
     private HashMap<Integer, HashMap<Integer, EdgeData>> outEdges;
     private HashMap<Integer, HashMap<Integer, EdgeData>> inEdges;
 
-
     public DirectedWeightedGraph_Class(DirectedWeightedGraph graph)
     {
         nodes = new HashMap<Integer, NodeData>();
