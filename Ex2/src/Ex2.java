@@ -38,6 +38,6 @@ public class Ex2
      */
     public static void runGUI(String json_file) {
         DirectedWeightedGraphAlgorithms alg = new DirectedWeightedGraphAlgorithms_Class(json_file);
-        Graph_UI ui = new Graph_UI(alg);
+        //Graph_UI ui = new Graph_UI(alg);
     }
 }

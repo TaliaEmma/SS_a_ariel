@@ -1,8 +1,9 @@
 package Test;
 
-import api.DirectedWeightedGraph_Class;
-import api.Node;
+import api.*;
 import org.junit.jupiter.api.Test;
+//import static org.junit.jupiter.api.Assertions.*;
+
 
 class DirectedWeightedGraph_ClassTest {
 
@@ -12,15 +13,15 @@ class DirectedWeightedGraph_ClassTest {
     {
         DirectedWeightedGraph_Class D= null;
 
-        D = new DirectedWeightedGraph_Class("G1");
-        D.getNode(1);
+       // D = new DirectedWeightedGraph_Class("G1");
+        //D.getNode(1);
 
         return D;
 }
     @Test
     void getNode() {
         //e();
-         //assertEquals(e().getNode(1),2);
+        //assertEquals(e().getNode(2),2);
     }
 
     @Test
