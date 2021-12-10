@@ -39,3 +39,63 @@ in case we cant reach one of the nodes from the given list we will return null.
 * the findNextNode function is udes in the tsp function. we will call it every time we want to know the next node to go to from our current stand.
 * the function listWeight is used in the tsp function as well. it will provide us the weight information of a given Node list (go over the list and return total weight).
 
+
+
+time results:
+1000 nodes
+
+the graph isConnected: true
+1000 nodes isConnected time in millisecond: 161
+
+shortestPathDist from 6 to 300: 206.50674591631812
+1000 nodes shortestPathDist(weight) time in millisecond: 15
+
+shortestPath from 6 to 300: 6, 300, 
+1000 nodes shortestPathDist(list) time in millisecond: 2
+
+center is: 362
+1000 nodes center time in millisecond: 1081
+
+check tsp with the list: 6, 300, 
+the returned list is: 6, 300, 
+1000 nodes tsp time in millisecond: 17
+
+
+
+10000 nodes:
+
+10000 nodes load time in millisecond: 566
+
+the graph isConnected: true
+10000 nodes isConnected time in millisecond: 10337
+
+shortestPathDist from 6 to 300: 1157.2836333849277
+10000 nodes shortestPathDist(weight) time in millisecond: 49
+
+shortestPath from 6 to 300: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300, 
+10000 nodes shortestPathDist(list) time in millisecond: 27
+
+center is: 3846
+10000 nodes center time in millisecond: 150595
+
+check tsp with the list: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300, 
+the returned list is: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300, 
+10000 nodes tsp time in millisecond: 26098
+
+
+100000 nodes:
+
+the graph isConnected: true
+100000 nodes isConnected time in millisecond: 4549145
+
+shortestPathDist from 6 to 300: 652.8947330353053
+100000 nodes shortestPathDist(weight) time in millisecond: 1966
+
+shortestPath from 6 to 300: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300, 
+100000 nodes shortestPathDist(list) time in millisecond: 572
+
+check tsp with the list: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300, 
+the returned list is: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300, 
+100000 nodes tsp time in millisecond: 617668
+
+
