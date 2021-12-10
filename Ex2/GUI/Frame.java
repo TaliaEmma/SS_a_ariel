@@ -14,7 +14,7 @@ public class Frame extends JFrame implements ActionListener {
         this.setSize(420, 420);
         this.setTitle("Gui Panel");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.getContentPane().setBackground(Color.white);
+        this.getContentPane().setBackground(Color.lightGray);
         this.setLayout(new FlowLayout());
 
         Open = new JButton("Open");
