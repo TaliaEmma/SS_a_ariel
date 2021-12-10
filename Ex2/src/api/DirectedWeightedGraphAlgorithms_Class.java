@@ -297,10 +297,20 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
 
     private static void DFS(List<List<Integer>> adjList, int v, boolean[] visited)
     {
-        visited[v] = true;
-        for (int u: adjList.get(v))
-            if (!visited[u])
-                DFS(adjList, u, visited);
+        Stack<Integer> stack = new Stack<>();
+        stack.push(v);
+        while (!stack.empty())
+        {
+            v = stack.pop();
+            if (visited[v])
+                continue;
+
+            visited[v] = true;
+            List<Integer> a = adjList.get(v);
+            for (Integer i : adjList.get(v))
+                if (!visited[i])
+                    stack.push(i);
+        }
     }
 
     private double dijkstra(int src, HashMap<Integer, ArrayList<AdjListNode>> ew)
