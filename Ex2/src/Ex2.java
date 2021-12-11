@@ -1,3 +1,4 @@
+import GUI.DrawGraph;
 import api.*;
 
 /**
@@ -30,8 +31,14 @@ public class Ex2
      * @param json_file - a json file (e.g., G1.json - G3.gson)
      *
      */
-    public static void runGUI(String json_file) {
+    public static void runGUI(String json_file)
+    {
         DirectedWeightedGraphAlgorithms alg = new DirectedWeightedGraphAlgorithms_Class(json_file);
-        //Graph_UI ui = new Graph_UI(alg);
+        DrawGraph gui = new DrawGraph(alg);
+    }
+
+    public static void main(String[] args)
+    {
+        runGUI(args[0]);
     }
 }

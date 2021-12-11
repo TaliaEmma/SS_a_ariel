@@ -57,9 +57,15 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
     @Override
     public boolean isConnected() //worst case: o(V*(V+E))
     {
-        List<List<Integer>> adjList = new ArrayList<>();
-        for(int i = 0; i < graph.nodeSize(); i++)
-            adjList.add(new ArrayList<>());
+        HashMap<Integer, List<Integer>> adjList = new HashMap<>();
+        HashMap<Integer, Boolean> visited = new HashMap<>();
+        Iterator<NodeData> nodeIter = graph.nodeIter();
+        while (nodeIter.hasNext())
+        {
+            NodeData node = nodeIter.next();
+            adjList.put(node.getKey(), new ArrayList<>());
+            visited.put(node.getKey(), false);
+        }
 
         // add edges to the directed graph
         Iterator<EdgeData> iter = graph.edgeIter();
@@ -69,13 +75,17 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
             adjList.get(e.getSrc()).add(e.getDest());
         }
 
-        for(int i = 0; i < graph.nodeSize(); i++) // do for every node
+        nodeIter = graph.nodeIter();
+        while (nodeIter.hasNext()) // do for every node
         {
-            boolean[] visited = new boolean[graph.nodeSize()];
-            DFS(adjList, i, visited);
-            for(boolean b: visited)
+            DFS(adjList, nodeIter.next().getKey(), visited);
+            for(boolean b: visited.values())
                 if (!b)
+                {
                     return false;
+                }
+            else
+                b = false;
         }
         return true;
     }
@@ -295,20 +305,19 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
         return list;
     }
 
-    private static void DFS(List<List<Integer>> adjList, int v, boolean[] visited)
+    private static void DFS(HashMap<Integer, List<Integer>> adjList, int v, HashMap<Integer, Boolean> visited)
     {
         Stack<Integer> stack = new Stack<>();
         stack.push(v);
         while (!stack.empty())
         {
             v = stack.pop();
-            if (visited[v])
+            if (visited.get(v))
                 continue;
 
-            visited[v] = true;
-            List<Integer> a = adjList.get(v);
+            visited.put(v, true);
             for (Integer i : adjList.get(v))
-                if (!visited[i])
+                if (!visited.get(i))
                     stack.push(i);
         }
     }
