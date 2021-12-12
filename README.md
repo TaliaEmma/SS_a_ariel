@@ -14,6 +14,7 @@ graph class:
 * integer MC will be use to count changes in the graph.
 * we used hash map inside hash map to store the out edges inforamtion (first key is the src id and the second is the dest id).
 * we used hash map inside hash map to store the in edges inforamtion (first key is the src id and the second is the dest id).
+* we used hash map to store changes of specific node outEdges (key is node id and value is amout of changes we made in edges coming out of the node).
 
 * in order to remove a node from the graph we will use the edges iterator who will go over all the edges and remove them if the src or dest values mach with the selected node.
 then we will delete the node from the hash map by using its id number.
