@@ -8,21 +8,25 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 
-public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
+public class DirectedWeightedGraph_Class implements DirectedWeightedGraph
+{
     private HashMap<Integer, NodeData> nodes; //the key is the node id.
     private HashMap<String, EdgeData> edges; // for example, if src=2 and dest=4 then the key is the string: "2,4"
     private int MC; //count changes in the graph.
     private HashMap<Integer, HashMap<Integer, EdgeData>> outEdges;
     private HashMap<Integer, HashMap<Integer, EdgeData>> inEdges;
+    public HashMap<Integer, Integer> changes; //save amount of changes to a specific node outEdges
 
     public DirectedWeightedGraph_Class(DirectedWeightedGraph graph)
     {
-        nodes = new HashMap<Integer, NodeData>();
-        edges = new HashMap<String, EdgeData>();
-        outEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
-        inEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
+        nodes = new HashMap<>();
+        edges = new HashMap<>();
+        outEdges = new HashMap<>();
+        inEdges = new HashMap<>();
+        changes = new HashMap<>();
         MC = graph.getMC();
 
         Iterator<NodeData> iterator1 = graph.nodeIter();
@@ -37,16 +41,18 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
         {
             EdgeData edge = iterator2.next();
             connect(edge.getSrc(), edge.getDest(), edge.getWeight());
+            changes.put(edge.getSrc(), 0);
         }
     }
 
 
     public DirectedWeightedGraph_Class(String fileName)
     {
-        nodes = new HashMap<Integer, NodeData>();
-        edges = new HashMap<String, EdgeData>();
-        outEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
-        inEdges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
+        nodes = new HashMap<>();
+        edges = new HashMap<>();
+        outEdges = new HashMap<>();
+        inEdges = new HashMap<>();
+        changes = new HashMap<>();
         MC = 0;
 
         JSONObject j = null;
@@ -71,6 +77,7 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
             double z = Double.parseDouble(loc_of_node[2]);
             Node node = new Node(id, x, y, z);
             addNode(node);
+            MC = 0;
         }
         for(int i = 0; i < jEdges.length(); i++)
         {
@@ -78,6 +85,8 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
             double w = jEdges.getJSONObject(i).getDouble("w");
             int dest = jEdges.getJSONObject(i).getInt("dest");
             connect(src, dest, w);
+            changes.put(dest, 0);
+            MC = 0;
         }
     }
 
@@ -93,14 +102,14 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
     @Override
     public void addNode(NodeData n)
     {// hash map complexity of put is o(1) so the toal complexity of adding new node is o(1).
-        MC++;
         nodes.put(n.getKey() , new Node(n.getKey(), n.getLocation().x(), n.getLocation().y(), n.getLocation().z()));
+        changes.put(n.getKey(), 0);
+        MC++;
     }
 
     @Override
     public void connect(int src, int dest, double w)
     {//hash map complexity of put is o(1) so total complexity would be o(1).
-        MC++;
         inEdges.put(dest, new HashMap<Integer, EdgeData>());
         outEdges.put(src, new HashMap<Integer, EdgeData>());
         Edge e = new Edge(src, dest, w);
@@ -108,47 +117,54 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
         edges.put(str, e);
         inEdges.get(dest).put(src, e);
         outEdges.get(src).put(dest, e);
+        changes.put(src, changes.get(src)+1);
+        MC++;
     }
 
     @Override
     public Iterator<NodeData> nodeIter()
     {
-        return nodes.values().iterator();
+        return new NodeIterator();
     }
 
     @Override
     public Iterator<EdgeData> edgeIter()
     {
-        return edges.values().iterator();
+        return new EdgeIterator();
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id)
     {
-        return outEdges.get(node_id).values().iterator();
+        return new SpecificNodesIterator(node_id);
     }
 
     @Override
     public NodeData removeNode(int key)
     {
-        MC++;
         Iterator<EdgeData> edgesIter = edgeIter();
         while (edgesIter.hasNext())
         {
             EdgeData e = edgesIter.next();
             if (e.getSrc() == key || e.getDest() == key)
+            {
                 edgesIter.remove();
+                MC++;
+            }
         }
+        changes.remove(key);
+        MC++;
         return nodes.remove(key); //o(1)
     }
 
     @Override
     public EdgeData removeEdge(int src, int dest)
     {
-        MC++;
         outEdges.get(src).remove(dest);
         inEdges.get(dest).remove(src);
         String str = src + "," + dest;
+        changes.put(src, changes.get(src)+1);
+        MC++;
         return edges.remove(str);
     }
 
@@ -166,4 +182,143 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph {
     public int getMC() {
         return MC;
     }
+
+
+    private class NodeIterator implements Iterator<NodeData>
+    {
+        int mc;
+        private final Iterator<NodeData> iter;
+
+        public NodeIterator()
+        {
+            iter = nodes.values().iterator();
+            mc = getMC();
+        }
+        @Override
+        public boolean hasNext()
+        {
+            if (mc == getMC())
+                return iter.hasNext();
+            else
+                throw new RuntimeException();
+        }
+        @Override
+        public NodeData next()
+        {
+            if (mc == getMC())
+                return iter.next();
+            else
+                throw new RuntimeException();
+        }
+        @Override
+        public void remove()
+        {
+            if (mc == getMC())
+            {
+                iter.remove();
+                mc++;
+            }
+            else
+                throw new RuntimeException();
+        }
+        @Override
+        public void forEachRemaining(Consumer<? super NodeData> action)
+        {
+            iter.forEachRemaining(action);
+        }
+    }
+
+    private class EdgeIterator implements Iterator<EdgeData>
+    {
+        int mc;
+        private final Iterator<EdgeData> iter;
+
+        public EdgeIterator()
+        {
+            iter = edges.values().iterator();
+            mc = getMC();
+        }
+        @Override
+        public boolean hasNext()
+        {
+            if (mc == getMC())
+                return iter.hasNext();
+            else
+                throw new RuntimeException();
+        }
+        @Override
+        public EdgeData next()
+        {
+            if (mc == getMC())
+                return iter.next();
+            else
+                throw new RuntimeException();
+        }
+        @Override
+        public void remove()
+        {
+            if (mc == getMC())
+            {
+                iter.remove();
+                mc++;
+            }
+            else
+                throw new RuntimeException();
+        }
+
+        @Override
+        public void forEachRemaining(Consumer<? super EdgeData> action)
+        {
+            iter.forEachRemaining(action);
+        }
+    }
+
+    private class SpecificNodesIterator implements Iterator<EdgeData>
+    {
+        int mc;
+        int id;
+        private final Iterator<EdgeData> iter;
+
+        public SpecificNodesIterator(int node_id)
+        {
+            id = node_id;
+            iter = outEdges.get(node_id).values().iterator();
+            mc = changes.get(node_id);
+        }
+        @Override
+        public boolean hasNext()
+        {
+            if (mc == changes.get(id))
+                return iter.hasNext();
+            else
+                throw new RuntimeException();
+        }
+        @Override
+        public EdgeData next()
+        {
+            if (mc == changes.get(id))
+                return iter.next();
+            else
+                throw new RuntimeException();
+        }
+        @Override
+        public void remove()
+        {
+            if (mc == changes.get(id))
+            {
+                iter.remove();
+                mc++;
+            }
+            else
+                throw new RuntimeException();
+        }
+
+        @Override
+        public void forEachRemaining(Consumer<? super EdgeData> action)
+        {
+            iter.forEachRemaining(action);
+        }
+    }
+
+
 }
