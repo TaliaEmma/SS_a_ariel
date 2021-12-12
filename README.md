@@ -47,45 +47,75 @@ Time results:
 * 1000 nodes:
 
   1000 nodes load time in millisecond: 163
+  
   The graph isConnected: true
+  
   1000 nodes isConnected time in millisecond: 34
+  
   ShortestPathDist from 6 to 300: 206.50674591631812
+  
   1000 nodes shortestPathDist(weight) time in millisecond: 18
+  
   ShortestPath from 6 to 300: 6, 300, 
+  
   1000 nodes shortestPathDist(list) time in millisecond: 3
+  
   Center is: 362
+  
   1000 nodes center time in millisecond: 823
+  
   Check tsp with the list: 6, 300, 
+  
   The returned list is: 6, 300, 
+  
   1000 nodes tsp time in millisecond: 18
 
 
 * 10000 nodes:
 
   10000 nodes load time in millisecond: 566
+  
   The graph isConnected: true
+  
   10000 nodes isConnected time in millisecond: 10337
+  
   ShortestPathDist from 6 to 300: 1157.2836333849277
+  
   10000 nodes shortestPathDist(weight) time in millisecond: 49
+  
   ShortestPath from 6 to 300: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
+  
   10000 nodes shortestPathDist(list) time in millisecond: 27
+  
   Center is: 3846
+  
   10000 nodes center time in millisecond: 150595
+  
   Check tsp with the list: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
+  
   The returned list is: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
+  
   10000 nodes tsp time in millisecond: 26098
 
 
 * 100000 nodes:
 
   The graph isConnected: true
+
   100000 nodes isConnected time in millisecond: 4549145
+  
   ShortestPathDist from 6 to 300: 652.8947330353053
+  
   100000 nodes shortestPathDist(weight) time in millisecond: 1966
+  
   ShortestPath from 6 to 300: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
+  
   100000 nodes shortestPathDist(list) time in millisecond: 572
+  
   Check tsp with the list: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
+  
   The returned list is: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
+  
   100000 nodes tsp time in millisecond: 617668
 
 
