@@ -13,7 +13,7 @@ public class Frame extends JFrame implements ActionListener
     JButton shortPathWeight, shortPathList, tsp, addNode, removeNode, addEdge, removeEdge;
     JTextField field;
     JLabel label;
-    private DrawGraph graph;
+    private final DrawGraph graph;
 
 
 
@@ -141,7 +141,7 @@ public class Frame extends JFrame implements ActionListener
                 double x = Double.parseDouble(field.getText().split(",")[1]);
                 double y = Double.parseDouble(field.getText().split(",")[2]);
                 graph.getAlgo().getGraph().addNode(new Node(id, x,y,0));
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
                 graph.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 graph.dispatchEvent(new WindowEvent(graph, WindowEvent.WINDOW_CLOSING));
@@ -164,7 +164,7 @@ public class Frame extends JFrame implements ActionListener
                 int dest = Integer.parseInt(field.getText().split(",")[1]);
                 double weight = Double.parseDouble(field.getText().split(",")[2]);
                 graph.getAlgo().getGraph().connect(src, dest, weight);
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
                 graph.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 graph.dispatchEvent(new WindowEvent(graph, WindowEvent.WINDOW_CLOSING));
@@ -186,7 +186,7 @@ public class Frame extends JFrame implements ActionListener
                 int src = Integer.parseInt(field.getText().split(",")[0]);
                 int dest = Integer.parseInt(field.getText().split(",")[1]);
                 graph.getAlgo().getGraph().removeEdge(src, dest);
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
                 graph.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 graph.dispatchEvent(new WindowEvent(graph, WindowEvent.WINDOW_CLOSING));
@@ -205,7 +205,7 @@ public class Frame extends JFrame implements ActionListener
         {
             int id = Integer.parseInt(field.getText());
             graph.getAlgo().getGraph().removeNode(id);
-            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             graph.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             graph.dispatchEvent(new WindowEvent(graph, WindowEvent.WINDOW_CLOSING));

@@ -10,29 +10,22 @@ import java.awt.event.ComponentEvent;
 public class DrawGraph extends JFrame
 {
 
-    private Menu menu;
-    private DirectedWeightedGraphAlgorithms algorithm;
-    private DrawNodes nodes;
-    private DrawEdges edges;
-    public static final int HEIGHT = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2);
-    public static final int WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2);
+    private final DirectedWeightedGraphAlgorithms algorithm;
+    Draw d;
+
 
     public DrawGraph(DirectedWeightedGraphAlgorithms algorithm)
     {
         this.setTitle("GUI");
         this.setLayout(new BorderLayout());
-        this.setSize(WIDTH, HEIGHT);
+        this.setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2) , (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         this.algorithm = algorithm;
+        this.d = new Draw(this);
+        Menu menu = new Menu(this);
 
-        this.nodes = new DrawNodes(this);
-        this.edges = new DrawEdges(this);
-        menu = new Menu(this);
-
-        this.add(nodes, BorderLayout.CENTER);
-        setVisible(true);
-        this.add(edges, BorderLayout.CENTER);
+        this.add(d, BorderLayout.CENTER);
         setVisible(true);
         setJMenuBar(menu.menu);
         setVisible(true);
@@ -40,11 +33,12 @@ public class DrawGraph extends JFrame
 
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-                nodes.repaint();
-                edges.repaint();
+                d.repaint();
             }});
     }
 
-
-    public DirectedWeightedGraphAlgorithms getAlgo() {return algorithm;}
+    public DirectedWeightedGraphAlgorithms getAlgo()
+    {
+        return algorithm;
+    }
 }

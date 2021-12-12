@@ -13,7 +13,7 @@ public class Menu implements ActionListener
     JMenuBar menu;
     JMenu Graph, Algorithm;
     JMenuItem save, load, addNode, removeNode, addEdge, removeEdge, tsp, center, isConnected, shortestPathWeight, shortestPathList;
-    private DrawGraph graph;
+    private final DrawGraph graph;
 
     public Menu(DrawGraph g) {
         graph = g;
