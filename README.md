@@ -42,7 +42,7 @@ in case we cant reach one of the nodes from the given list we will return null.
 
 
 time results:
-1000 nodes
+1000 nodes:
 
 the graph isConnected: true
 1000 nodes isConnected time in millisecond: 161
