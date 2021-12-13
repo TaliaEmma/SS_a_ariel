@@ -105,4 +105,5 @@ in case we cant reach one of the nodes from the given list we will return null.
 
 # notes
 * we used Hash map most of the time because the nodes won't always be in a serial order (we can have in a graph for expale only 3 nodes with the ids: 3,86,999) and we needed to find a way to keep the data in the best time complexity and with no serial order. the use of hash map answer that difficulty because get, put and remove actions in most hash map takes only o(1) in time complexity.
+* the 100000 nodes json file is compress to zip because its size.
 
