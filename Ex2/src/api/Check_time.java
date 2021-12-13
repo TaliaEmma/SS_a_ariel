@@ -11,55 +11,55 @@ public class Check_time
 {
     public static void main(String[] args)
     {
-        //createGraph();
+        createGraph();
 
-        DirectedWeightedGraphAlgorithms a = new DirectedWeightedGraphAlgorithms_Class();
-        long startTime = System.nanoTime();
-        a.load("Ex2/data/100000.json");
-        long endTime = System.nanoTime();
-        long timeElapsed = endTime - startTime;
-        System.out.println("100000 nodes load time in millisecond: " + timeElapsed / 1000000);
-        System.out.println();
-
-        startTime = System.nanoTime();
-        System.out.println("the graph isConnected: " + a.isConnected());
-        endTime = System.nanoTime();
-        timeElapsed = endTime - startTime;
-        System.out.println("100000 nodes isConnected time in millisecond: " + timeElapsed / 1000000);
-        System.out.println();
-
-        startTime = System.nanoTime();
-        System.out.println("shortestPathDist from 6 to 300: " + a.shortestPathDist(6,300));
-        endTime = System.nanoTime();
-        timeElapsed = endTime - startTime;
-        System.out.println("100000 nodes shortestPathDist(weight) time in millisecond: " + timeElapsed / 1000000);
-        System.out.println();
-
-        startTime = System.nanoTime();
-        List<NodeData> list = a.shortestPath(6,300);
-        endTime = System.nanoTime();
-        timeElapsed = endTime - startTime;
-        System.out.print("shortestPath from 6 to 300: ");
-        printList(list);
-        System.out.println("100000 nodes shortestPathDist(list) time in millisecond: " + timeElapsed / 1000000);
-        System.out.println();
-
-        startTime = System.nanoTime();
-        System.out.println("center is: " + a.center().getKey());
-        endTime = System.nanoTime();
-        timeElapsed = endTime - startTime;
-        System.out.println("100000 nodes center time in millisecond: " + timeElapsed / 1000000);
-        System.out.println();
-
-        startTime = System.nanoTime();
-        List<NodeData> list2 = a.tsp(list);
-        endTime = System.nanoTime();
-        timeElapsed = endTime - startTime;
-        System.out.print("check tsp with the list: ");
-        printList(list);
-        System.out.print("the returned list is: ");
-        printList(list2);
-        System.out.println("100000 nodes tsp time in millisecond: " + timeElapsed / 1000000);
+//        DirectedWeightedGraphAlgorithms a = new DirectedWeightedGraphAlgorithms_Class();
+//        long startTime = System.nanoTime();
+//        a.load("Ex2/data/100000.json");
+//        long endTime = System.nanoTime();
+//        long timeElapsed = endTime - startTime;
+//        System.out.println("100000 nodes load time in millisecond: " + timeElapsed / 1000000);
+//        System.out.println();
+//
+//        startTime = System.nanoTime();
+//        System.out.println("the graph isConnected: " + a.isConnected());
+//        endTime = System.nanoTime();
+//        timeElapsed = endTime - startTime;
+//        System.out.println("100000 nodes isConnected time in millisecond: " + timeElapsed / 1000000);
+//        System.out.println();
+//
+//        startTime = System.nanoTime();
+//        System.out.println("shortestPathDist from 6 to 300: " + a.shortestPathDist(6,300));
+//        endTime = System.nanoTime();
+//        timeElapsed = endTime - startTime;
+//        System.out.println("100000 nodes shortestPathDist(weight) time in millisecond: " + timeElapsed / 1000000);
+//        System.out.println();
+//
+//        startTime = System.nanoTime();
+//        List<NodeData> list = a.shortestPath(6,300);
+//        endTime = System.nanoTime();
+//        timeElapsed = endTime - startTime;
+//        System.out.print("shortestPath from 6 to 300: ");
+//        printList(list);
+//        System.out.println("100000 nodes shortestPathDist(list) time in millisecond: " + timeElapsed / 1000000);
+//        System.out.println();
+//
+//        startTime = System.nanoTime();
+//        System.out.println("center is: " + a.center().getKey());
+//        endTime = System.nanoTime();
+//        timeElapsed = endTime - startTime;
+//        System.out.println("100000 nodes center time in millisecond: " + timeElapsed / 1000000);
+//        System.out.println();
+//
+//        startTime = System.nanoTime();
+//        List<NodeData> list2 = a.tsp(list);
+//        endTime = System.nanoTime();
+//        timeElapsed = endTime - startTime;
+//        System.out.print("check tsp with the list: ");
+//        printList(list);
+//        System.out.print("the returned list is: ");
+//        printList(list2);
+//        System.out.println("100000 nodes tsp time in millisecond: " + timeElapsed / 1000000);
 
 
     }

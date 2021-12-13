@@ -9,7 +9,8 @@ import java.util.*;
 
 public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGraphAlgorithms
 {
-    static class AdjListNode {
+    static class AdjListNode { //static class used in Dijkstra’s algo to store node id and one of its out edges weight
+        // (so node and the cost to move from it).
         int vertex;
         double weight;
 
@@ -57,14 +58,17 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
     @Override
     public boolean isConnected() //worst case: o(V*(V+E))
     {
-        HashMap<Integer, List<Integer>> adjList = new HashMap<>();
-        HashMap<Integer, Boolean> visited = new HashMap<>();
+        HashMap<Integer, List<Integer>> adjList = new HashMap<>(); //sore for every node (key is node id) the list of adjust nodes.
+        HashMap<Integer, Boolean> visited = new HashMap<>(); //store for every run how many nodes we visited
+        HashMap<Integer, Boolean> falseVisit = new HashMap<>(); //used to zero the visited after every run.
+        // (if one of them is false in the end of each run then the graph is not connected).
         Iterator<NodeData> nodeIter = graph.nodeIter();
         while (nodeIter.hasNext())
         {
             NodeData node = nodeIter.next();
             adjList.put(node.getKey(), new ArrayList<>());
             visited.put(node.getKey(), false);
+            falseVisit.put(node.getKey(), false);
         }
 
         // add edges to the directed graph
@@ -79,13 +83,9 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
         while (nodeIter.hasNext()) // do for every node
         {
             DFS(adjList, nodeIter.next().getKey(), visited);
-            for(boolean b: visited.values())
-                if (!b)
-                {
-                    return false;
-                }
-            else
-                b = false;
+            if (visited.containsValue(false))
+                return false;
+            visited.putAll(falseVisit);
         }
         return true;
     }
@@ -93,8 +93,9 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
     @Override
     public double shortestPathDist(int src, int dest)
     {// final complexity is: o(ElogV)
-        HashMap<Integer, ArrayList<AdjListNode>> ew = new HashMap<>();
-        HashMap<Integer, Double> dist = new HashMap<>();
+        HashMap<Integer, ArrayList<AdjListNode>> ew = new HashMap<>(); //sore for every node (key is node id) the list of adjust nodes
+        //in the form of AdjlistNode object (look up in the static class for explanation).
+        HashMap<Integer, Double> dist = new HashMap<>(); //store distance from the src to every other node.
         Iterator<NodeData> nodeIter = graph.nodeIter();
         while (nodeIter.hasNext())
         {
@@ -186,7 +187,7 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
             ew.get(edge.getSrc()).add(new AdjListNode(edge.getDest(), edge.getWeight()));
         }
 
-        int id=0;
+        int id=0; //represent the center node id.
         double lowestWeight= Double.MAX_VALUE;
         Iterator<NodeData> nodesIter = graph.nodeIter();
         while (nodesIter.hasNext())
@@ -294,7 +295,8 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
     }
 
     private List<NodeData> checkPath(HashMap<Integer, Integer> preNode, int src, int dest)
-    {
+    {//the value of each cell in the hash map is the node id we need to reach before going to the node id represented
+        // by its key (therefore we start from the dest id).
         LinkedList<NodeData> list = new LinkedList<>();
         while (dest != src)
         {
@@ -306,7 +308,7 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
     }
 
     private static void DFS(HashMap<Integer, List<Integer>> adjList, int v, HashMap<Integer, Boolean> visited)
-    {
+    {//non-recursive DFS for a given src id. would finish when we don't have any nodes to go to. (complexity of o(E+V))
         Stack<Integer> stack = new Stack<>();
         stack.push(v);
         while (!stack.empty())
@@ -352,11 +354,12 @@ public class DirectedWeightedGraphAlgorithms_Class implements DirectedWeightedGr
             }
         }
         double max = -1;
-        for (Double weight: dist.values())
+        for (Double weight: dist.values()) //check for the max distance value.
         {
             if(weight > max)
                 max = weight;
-            if(weight == Double.MAX_VALUE)
+            if(weight == Double.MAX_VALUE) //represent that the graph is not connected. so we will return -1 because
+                // all nodes id are positive integers.
                 return -1;
         }
         return max;

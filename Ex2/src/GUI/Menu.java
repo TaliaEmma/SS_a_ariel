@@ -62,7 +62,7 @@ public class Menu implements ActionListener
     }
 
     @Override
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed(ActionEvent e) //we receive actions from the user and act accordingly.
     {
         JMenuItem src = (JMenuItem) e.getSource();
         Frame temp = new Frame(graph);
@@ -97,6 +97,8 @@ public class Menu implements ActionListener
         if (src == isConnected)
         {
             temp.setTitle("is Connected");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             JLabel label = new JLabel(graph.getAlgo().isConnected() ? "TRUE" : "FALSE");
             label.setBounds(100, 50, 100, 50);
             temp.add(label);
@@ -104,26 +106,33 @@ public class Menu implements ActionListener
         }
         if (src == addEdge)
         {
-
             temp.setTitle("add Edge");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             temp.addEdge();
             temp.setVisible(true);
         }
         if (src == removeEdge)
         {
             temp.setTitle("remove Edge");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             temp.removeEdge();
             temp.setVisible(true);
         }
         if (src == addNode)
         {
             temp.setTitle("add Node");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             temp.addNode();
             temp.setVisible(true);
         }
         if (src == removeNode)
         {
             temp.setTitle("remove Node");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             temp.removeNode();
             temp.setVisible(true);
 
@@ -131,24 +140,32 @@ public class Menu implements ActionListener
         if (src == shortestPathList)
         {
             temp.setTitle("Shortest Path list");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             temp.shortPathList();
             temp.setVisible(true);
         }
         if (src == shortestPathWeight)
         {
             temp.setTitle("Shortest Path weight");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             temp.shortPathWeight();
             temp.setVisible(true);
         }
         if (src == tsp)
         {
             temp.setTitle("tsp");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             temp.tsp();
             temp.setVisible(true);
         }
         if (src == center)
         {
             temp.setTitle("center");
+            temp.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
             NodeData center = graph.getAlgo().center();
             JLabel label;
             if(center!=null)

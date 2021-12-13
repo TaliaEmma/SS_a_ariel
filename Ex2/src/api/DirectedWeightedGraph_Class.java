@@ -21,7 +21,7 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph
     public HashMap<Integer, Integer> changes; //save amount of changes to a specific node outEdges
 
     public DirectedWeightedGraph_Class(DirectedWeightedGraph graph)
-    {
+    {//copy constructor
         nodes = new HashMap<>();
         edges = new HashMap<>();
         outEdges = new HashMap<>();
@@ -33,21 +33,21 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph
         while(iterator1.hasNext())
         {
             NodeData node = iterator1.next();
-            addNode(node);
+            addNode(node); //create new node from the current node info and add it to the new graph.
         }
 
         Iterator<EdgeData> iterator2 = graph.edgeIter();
         while(iterator2.hasNext())
         {
             EdgeData edge = iterator2.next();
-            connect(edge.getSrc(), edge.getDest(), edge.getWeight());
-            changes.put(edge.getSrc(), 0);
+            connect(edge.getSrc(), edge.getDest(), edge.getWeight()); //create new edge from the current edge info and add it to the new graph.
+            changes.put(edge.getSrc(), 0); //new graph, so we will zero the amount of changes.
         }
     }
 
 
     public DirectedWeightedGraph_Class(String fileName)
-    {
+    {//constructor from json file
         nodes = new HashMap<>();
         edges = new HashMap<>();
         outEdges = new HashMap<>();
@@ -95,7 +95,7 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph
 
     @Override
     public EdgeData getEdge(int src, int dest) {
-        String str = src + "," + dest;
+        String str = src + "," + dest; //every edge will be saved by string representing the edge src and dest with "," between them.
         return edges.get(str);
     }
 
@@ -110,8 +110,8 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph
     @Override
     public void connect(int src, int dest, double w)
     {//hash map complexity of put is o(1) so total complexity would be o(1).
-        inEdges.put(dest, new HashMap<Integer, EdgeData>());
-        outEdges.put(src, new HashMap<Integer, EdgeData>());
+        inEdges.put(dest, new HashMap<>());
+        outEdges.put(src, new HashMap<>());
         Edge e = new Edge(src, dest, w);
         String str = src + "," + dest;
         edges.put(str, e);
@@ -143,10 +143,10 @@ public class DirectedWeightedGraph_Class implements DirectedWeightedGraph
     public NodeData removeNode(int key)
     {
         Iterator<EdgeData> edgesIter = edgeIter();
-        while (edgesIter.hasNext())
+        while (edgesIter.hasNext()) //go over all the graph edges. o(E)
         {
             EdgeData e = edgesIter.next();
-            if (e.getSrc() == key || e.getDest() == key)
+            if (e.getSrc() == key || e.getDest() == key) //check if the edge comes from or to the deleted node, and then remove it.
             {
                 edgesIter.remove();
                 MC++;
