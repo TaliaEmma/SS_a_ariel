@@ -7,7 +7,16 @@ ideas and information were taken from the following websites:
 * https://favtutor.com/blogs/depth-first-search-java
 
 
-graph class:
+### how to run:
+To run the program, enter the command: "java -jar SS_a_ariel.jar" followed by the name of the json file. for example: java -jar SS_a_ariel.jar Ex2/data/G2.json 
+
+# GUI:
+* the Frame class extends JFrame and implements ActionListener. we use it to open new window to enter and recieve specific information for the algorithm actions. for exaple if we want to use the add a node then we will use the class to open a new window asking us the new node details, check they legal to use and then apply the new information in the graph.
+* The Menu class implements ActionListener and we use it to give the user visiable options. each button in the menu is used to activate different algorithm. for exaple the "add node" button will add new node to the graph.
+* The draw class extend JPanel and it used to give a visual drawing of the graph. (draw all the nodes and the edges).
+* the DrawGraph class extend JFrame and it used to combine all the above classes in order to complete the GUI.
+
+# graph class:
 * in the graph class we created two constructors (copy constructor and one that build the graph from given json file name).
 * we used hash map to store the nodes information (key is the node id and the value is the nodeData itself).
 * we used hash map to store the Edges information (key is the String made from the edge src id, comma and the edge dest id. The value is the edgeData).
@@ -22,7 +31,7 @@ then we will delete the node from the hash map by using its id number.
 * in order to remove an edge we will remove it from the 3 hash map in the graph. (edges hash map, out edges hash map and in edges hash map).
 
 
-algorithm class:
+# algorithm class:
 * in the algo class we have 1 constructer that build the graph from a given json file name.
 * the isConnected function use DFS algorithm V times (every time we change the begining indes to a new one in order to check its connectivity with the other nodes)
 * the shortestPathDist function uses Dijkstra’s algorithm. The idea is to traverse all vertices of the graph by using BFS algo consept and use a Min Heap to store the vertices not yet included. Min Heap is used as a priority queue to get the minimum distance vertex from set of not yet included vertices. Time complexity of BFS is o(E+V) and complexity of operations like extract-min and decrease-key value is O(LogV) for Min Heap. therefore, overall time complexity is O(E+V)*O(LogV) which is O((E+V)*LogV) = O(ELogV). all the found distances are stored in a hash map (key is the node id). the function will return the requested data from the hash map (by using the dest id as key).
@@ -35,89 +44,65 @@ in case we cant reach one of the nodes from the given list we will return null.
 * the save functuon will create new json file and insert there all the graph data (we will insert the graph data in a JSONObject and inside it we will have two JSONArrarys with the nodes and the edges (each node and edge is a JSONObject of itself).
 * the load function use the graph pre made constructer that works with a given json file name.
 * the checkPath function is used to rerieve the list from the hash map (second shortestPathDist function).
-* the DFS function uses recursive approach to a classic DFS algorithm.
+* the DFS function uses non recursive approach to a classic DFS algorithm from a given node id.
 * the dijkstra function operate the dijkstra algoritm we use in the center function.
 * the findNextNode function is udes in the tsp function. we will call it every time we want to know the next node to go to from our current stand.
 * the function listWeight is used in the tsp function as well. it will provide us the weight information of a given Node list (go over the list and return total weight).
 
 
 
-Time results:
+## Time results:
 
-* 1000 nodes:
+# 1000 nodes:
 
-  1000 nodes load time in millisecond: 163
-  
-  The graph isConnected: true
-  
-  1000 nodes isConnected time in millisecond: 34
-  
-  ShortestPathDist from 6 to 300: 206.50674591631812
-  
-  1000 nodes shortestPathDist(weight) time in millisecond: 18
-  
-  ShortestPath from 6 to 300: 6, 300, 
-  
-  1000 nodes shortestPathDist(list) time in millisecond: 3
-  
-  Center is: 362
-  
-  1000 nodes center time in millisecond: 823
-  
-  Check tsp with the list: 6, 300, 
-  
-  The returned list is: 6, 300, 
-  
-  1000 nodes tsp time in millisecond: 18
+- 1000 nodes load time in millisecond: 163
+- The graph isConnected: true
+- 1000 nodes isConnected time in millisecond: 34
+- ShortestPathDist from 6 to 300: 206.50674591631812
+- 1000 nodes shortestPathDist(weight) time in millisecond: 18
+- ShortestPath from 6 to 300: 6, 300, 
+- 1000 nodes shortestPathDist(list) time in millisecond: 3
+- Center is: 362
+- 1000 nodes center time in millisecond: 823
+- Check tsp with the list: 6, 300, 
+- The returned list is: 6, 300, 
+- 1000 nodes tsp time in millisecond: 18
 
 
-* 10000 nodes:
 
-  10000 nodes load time in millisecond: 566
-  
-  The graph isConnected: true
-  
-  10000 nodes isConnected time in millisecond: 10337
-  
-  ShortestPathDist from 6 to 300: 1157.2836333849277
-  
-  10000 nodes shortestPathDist(weight) time in millisecond: 49
-  
-  ShortestPath from 6 to 300: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
-  
-  10000 nodes shortestPathDist(list) time in millisecond: 27
-  
-  Center is: 3846
-  
-  10000 nodes center time in millisecond: 150595
-  
-  Check tsp with the list: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
-  
-  The returned list is: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
-  
-  10000 nodes tsp time in millisecond: 26098
+# 10000 nodes:
+
+- 10000 nodes load time in millisecond: 566
+- The graph isConnected: true
+- 10000 nodes isConnected time in millisecond: 10337
+- ShortestPathDist from 6 to 300: 1157.2836333849277
+- 10000 nodes shortestPathDist(weight) time in millisecond: 49
+- ShortestPath from 6 to 300: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
+- 10000 nodes shortestPathDist(list) time in millisecond: 27
+- Center is: 3846
+- 10000 nodes center time in millisecond: 150595
+- Check tsp with the list: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
+- The returned list is: 6, 9204, 552, 6982, 2913, 5185, 3290, 1819, 4131, 3352, 3275, 1619, 300
+- 10000 nodes tsp time in millisecond: 26098
 
 
-* 100000 nodes:
 
-  100000 nodes load time in millisecond: 8778
-  
-  The graph isConnected: true
+# 100000 nodes:
 
-  100000 nodes isConnected time in millisecond: 123317
-  
-  ShortestPathDist from 6 to 300: 652.8947330353053
-  
-  100000 nodes shortestPathDist(weight) time in millisecond: 1966
-  
-  ShortestPath from 6 to 300: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
-  
-  100000 nodes shortestPathDist(list) time in millisecond: 572
-  
-  Check tsp with the list: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
-  
-  The returned list is: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
-  
-  100000 nodes tsp time in millisecond: 617668
+- 100000 nodes load time in millisecond: 8778
+- The graph isConnected: true
+- 100000 nodes isConnected time in millisecond: 123317
+- ShortestPathDist from 6 to 300: 652.8947330353053
+- 100000 nodes shortestPathDist(weight) time in millisecond: 1966
+- ShortestPath from 6 to 300: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
+- 100000 nodes shortestPathDist(list) time in millisecond: 572
+- Check tsp with the list: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
+- The returned list is: 6, 13858, 55451, 34862, 95986, 45065, 98369, 25679, 300
+- 100000 nodes tsp time in millisecond: 617668
 
+
+
+
+# notes
+* we used Hash map most of the time because the nodes won't always be in a serial order (we can have in a graph for expale only 3 nodes with the ids: 3,86,999) and we needed to find a way to keep the data in the best time complexity and with no serial order. the use of hash map answer that difficulty because get, put and remove actions in most hash map takes only o(1) in time complexity.
 
