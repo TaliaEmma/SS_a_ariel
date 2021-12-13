@@ -100,9 +100,11 @@ Time results:
 
 * 100000 nodes:
 
+  100000 nodes load time in millisecond: 8778
+  
   The graph isConnected: true
 
-  100000 nodes isConnected time in millisecond: 4549145
+  100000 nodes isConnected time in millisecond: 123317
   
   ShortestPathDist from 6 to 300: 652.8947330353053
   
